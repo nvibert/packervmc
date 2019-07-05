@@ -1,0 +1,63 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+
+      "vcenter_server":      "vcenter.sddc-A-B-C-D.vmwarevmc.com",
+      "username":            "cloudadmin@vmc.local",
+      "password":            "XXXXXXXXXXXXX",
+      "insecure_connection": "true",
+
+      "vm_name": "name_VM",
+      "datastore":"WorkloadDatastore",
+      "folder": "Workloads",
+      "cluster": "Cluster-1",
+      "network": "sddc-cgw-network-1",
+      "ssh_username": "jetbrains",
+      "ssh_password": "jetbrains",
+      "guest_os_type": "ubuntu64Guest",
+      "CPUs":             2,
+      "RAM":              4096,
+      "RAM_reserve_all": true,
+
+      "disk_controller_type":  "pvscsi",
+      "disk_size":        32768,
+      "disk_thin_provisioned": true,
+
+      "network_card": "vmxnet3",
+
+      "iso_paths": [
+        "[WorkloadDatastore] ISO/ubuntu-18.04.2-server-amd64.iso"
+      ],
+
+      "floppy_files": [
+        "./preseed.cfg"
+      ],
+      "boot_command": [
+        "<enter><wait><f6><wait><esc><wait>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs>",
+        "/install/vmlinuz",
+        " initrd=/install/initrd.gz",
+        " priority=critical",
+        " locale=en_US",
+        " file=/media/preseed.cfg",
+        "<enter>"
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["ls /"]
+    }
+  ]
+}
